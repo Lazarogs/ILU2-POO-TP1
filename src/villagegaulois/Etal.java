@@ -77,5 +77,76 @@ public class Etal {
 	public boolean contientProduit(String produit) {
 		return produit.equals(this.produit);
 	}
-
+	
+	private static class Marche {
+		private Etal etals[];
+		
+		public Marche(int nbEtals) {
+			this.etals = new Etal[nbEtals];
+		}
+		
+		public void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			this.etals[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+		}
+		
+		public int trouverEtalLibre() {
+			for (int i = 0; i < etals.length; i++) {
+				if (!etals[i].isEtalOccupe()) {
+					return i;
+				}
+			}
+			return -1;
+		}
+		
+		public Etal[] trouverEtals(String produit) {
+			int etalsTrouves = 0;
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].contientProduit(produit)) {
+					etalsTrouves++;
+				}
+			}
+				
+			//on connais le nombre d'étals qui vendent le produit, on les ajoute
+			//a notre tableau
+				
+			Etal resultat[] = new Etal[etalsTrouves];	
+			int indiceResultat = 0;
+			for (int i = 0; i < etals.length; i++) {
+					if (etals[i].contientProduit(produit)) {
+						resultat[indiceResultat] = etals[i];
+					}
+			}
+			return resultat;
+		}
+		
+		public Etal trouverVendeur(Gaulois gaulois) {
+			for(int i = 0; i < etals.length; i++) {
+				if (etals[i].getVendeur() == gaulois) {
+					return etals[i];
+				}
+			}
+			return null;
+		}
+		
+		public StringBuilder afficherMarche() {
+			StringBuilder resultat = new StringBuilder();
+			int nbEtalsLibres = 0;
+			for(int i = 0; i < etals.length; i++) {
+				if(etals[i].isEtalOccupe()) {
+					nbEtalsLibres++;
+				}
+				else {
+					resultat.append(etals[i].afficherEtal());
+				}
+			}
+			if (nbEtalsLibres > 0) {
+				resultat.append("Il reste ");
+				resultat.append(nbEtalsLibres);
+				resultat.append(" etals non utilisés dans le marché\n");
+			}
+			return resultat;
+		}
+	}
+	
+	
 }
